@@ -1,0 +1,6 @@
+{
+    "name":"KVCObject",
+    "version":"0.0.1",
+    "main":"lib/KVCObject.js",
+    "dependencies":{}
+}

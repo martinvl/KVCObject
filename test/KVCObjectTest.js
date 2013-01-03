@@ -1,5 +1,5 @@
 var assert = require('chai').assert;
-var KVCObject = require('../KVCObject');
+var KVCObject = require('../lib/KVCObject');
 
 suite('KVCObject', function() {
     setup(function () {
