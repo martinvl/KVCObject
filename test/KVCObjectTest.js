@@ -323,5 +323,98 @@ suite('KVCObject', function() {
                 kvc.setObject(object);
             });
         });
+
+        suite('_create', function () {
+            test('Emits \'_create\' event upon simple create', function (done) {
+                var kvc = this.object;
+
+                kvc.on('_create', function (keypath) {
+                    assert.equal(keypath, 'foo');
+                    done();
+                });
+
+                kvc.setObject({foo:'bar'});
+            });
+
+            test('Emits \'_create\' event upon multiple create', function (done) {
+                var kvc = this.object;
+
+                var keypaths = {'foo':null, 'man':null, 'man.name':null};
+                kvc.on('_create', function (keypath) {
+                    // keypath should not already have been created
+                    if (keypaths[keypath] === undefined) {
+                        assert.fail();
+                    }
+
+                    delete keypaths[keypath];
+
+                    if (Object.keys(keypaths).length == 0) { // all keypaths have created
+                        done();
+                    }
+                });
+
+                kvc.setObject({foo:'bar', man:{name:'johnny'}});
+            });
+
+            test('Does not emit \'_create\' event upon update', function (done) {
+                var kvc = this.object;
+                kvc.setObject({foo:'bar'});
+
+                kvc.on('_create', function (keypath) {
+                    assert.fail();
+                });
+
+                kvc.setValueForKeypath('car', 'foo');
+                setTimeout(done, 30);
+            });
+        });
+
+        suite('_delete', function () {
+            test('Emits \'_delete\' event upon simple delete', function (done) {
+                var kvc = this.object;
+
+                kvc.on('_delete', function (keypath) {
+                    assert.equal(keypath, 'foo');
+                    done();
+                });
+
+                kvc.setObject({foo:'bar'});
+                kvc.setObject({});
+            });
+
+            test('Emits \'_delete\' event upon multiple delete', function (done) {
+                var kvc = this.object;
+
+                var keypaths = {'foo':null, 'man':null, 'man.name':null};
+                kvc.on('_delete', function (keypath) {
+                    // keypath should not already have been deleted
+                    if (keypaths[keypath] === undefined) {
+                        assert.fail();
+                    }
+
+                    delete keypaths[keypath];
+
+                    if (Object.keys(keypaths).length == 0) { // all keypaths have deleted
+                        done();
+                    }
+                });
+
+                kvc.setObject({foo:'bar', man:{name:'johnny'}});
+                kvc.setObject({});
+            });
+
+            test('Does not emit \'_delete\' event upon update', function (done) {
+                var kvc = this.object;
+                kvc.setObject({foo:'bar'});
+
+                kvc.on('_delete', function (keypath) {
+                    assert.fail();
+                });
+
+                kvc.setValueForKeypath('car', 'foo');
+                setTimeout(done, 30);
+            });
+
+        });
     });
 });
