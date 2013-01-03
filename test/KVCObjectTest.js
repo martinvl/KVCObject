@@ -10,6 +10,27 @@ suite('KVCObject', function() {
         this.object.removeAllListeners();
     });
 
+    suite('Initialization', function () {
+        test('Sets default options when none are provided', function () {
+            assert.deepEqual(this.object._options, {delimiter:'.', prefix:'root'});
+        });
+
+        test('Sets options as expected', function () {
+            var options = {delimiter:'/', prefix:'foo'};
+            this.object = new KVCObject(options);
+
+            assert.deepEqual(this.object._options, options);
+        });
+
+        test('Sets mixed options as expected', function () {
+            this.object = new KVCObject({delimiter:'/'});
+            assert.deepEqual(this.object._options, {delimiter:'/', prefix:'root'});
+
+            this.object = new KVCObject({prefix:'foo'});
+            assert.deepEqual(this.object._options, {delimiter:'.', prefix:'foo'});
+        });
+    });
+
     suite('Private methods', function () {
         suite('._isSuperpath()', function () {
         });
