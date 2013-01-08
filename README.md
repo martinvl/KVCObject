@@ -12,7 +12,6 @@ Methods
     Valid options:
     * **delimiter** - _string_ - The string to use as delimiter between keys.
     **Default:** '.'
-    * **prefix** - _string_ - The path to the root object. **Default:** 'root'
 
 * **setObject**(< _object_ >object, [< _bool_ >silent]) - (_void_)  
     Sets the current root, overwriting the existing root. If this leads to a

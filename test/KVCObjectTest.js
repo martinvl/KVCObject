@@ -12,22 +12,14 @@ suite('KVCObject', function() {
 
     suite('Initialization', function () {
         test('Sets default options when none are provided', function () {
-            assert.deepEqual(this.object._options, {delimiter:'.', prefix:'root'});
+            assert.deepEqual(this.object._options, {delimiter:'.'});
         });
 
         test('Sets options as expected', function () {
-            var options = {delimiter:'/', prefix:'foo'};
+            var options = {delimiter:'/'};
             this.object = new KVCObject(options);
 
             assert.deepEqual(this.object._options, options);
-        });
-
-        test('Sets mixed options as expected', function () {
-            this.object = new KVCObject({delimiter:'/'});
-            assert.deepEqual(this.object._options, {delimiter:'/', prefix:'root'});
-
-            this.object = new KVCObject({prefix:'foo'});
-            assert.deepEqual(this.object._options, {delimiter:'.', prefix:'foo'});
         });
     });
 
@@ -39,39 +31,39 @@ suite('KVCObject', function() {
         });
 
         suite('._getAbsoluteKeypath()', function () {
-            test('Adds prefix as expected', function () {
-                assert.equal(this.object._getAbsoluteKeypath(''), 'root');
-                assert.equal(this.object._getAbsoluteKeypath('foo'), 'root.foo');
-                assert.equal(this.object._getAbsoluteKeypath('foo.bar'), 'root.foo.bar');
-            });
-
-            test('Doesn\'t add extra prefix', function () {
+            test('Handles empty prefix as expected', function () {
+                assert.equal(this.object._getAbsoluteKeypath(''), '');
+                assert.equal(this.object._getAbsoluteKeypath('foo'), 'foo');
+                assert.equal(this.object._getAbsoluteKeypath('foo.bar'), 'foo.bar');
                 assert.equal(this.object._getAbsoluteKeypath('root.foo.bar'), 'root.foo.bar');
             });
 
-            test('Handles empty prefix as expected', function () {
-                assert.equal(this.object._getAbsoluteKeypath('', ''), '');
-                assert.equal(this.object._getAbsoluteKeypath('foo', ''), 'foo');
-                assert.equal(this.object._getAbsoluteKeypath('foo.bar', ''), 'foo.bar');
-                assert.equal(this.object._getAbsoluteKeypath('root.foo.bar', ''), 'root.foo.bar');
+            test('Adds prefix as expected', function () {
+                assert.equal(this.object._getAbsoluteKeypath('', 'root'), 'root');
+                assert.equal(this.object._getAbsoluteKeypath('foo', 'root'), 'root.foo');
+                assert.equal(this.object._getAbsoluteKeypath('foo.bar', 'root'), 'root.foo.bar');
+            });
+
+            test('Doesn\'t add extra prefix', function () {
+                assert.equal(this.object._getAbsoluteKeypath('root.foo.bar', 'root'), 'root.foo.bar');
             });
         });
 
         suite('._getRelativeKeypath()', function () {
+            test('Handles empty prefix as expected', function () {
+                assert.equal(this.object._getRelativeKeypath(''), '');
+                assert.equal(this.object._getRelativeKeypath('root'), 'root');
+                assert.equal(this.object._getRelativeKeypath('root.foo'), 'root.foo');
+            });
+
             test('Removes prefix as expected', function () {
-                assert.equal(this.object._getRelativeKeypath('root'), '');
-                assert.equal(this.object._getRelativeKeypath('root.foo'), 'foo');
-                assert.equal(this.object._getRelativeKeypath('root.foo.bar'), 'foo.bar');
+                assert.equal(this.object._getRelativeKeypath('root', 'root'), '');
+                assert.equal(this.object._getRelativeKeypath('root.foo', 'root'), 'foo');
+                assert.equal(this.object._getRelativeKeypath('root.foo.bar', 'root'), 'foo.bar');
             });
 
             test('Removes only one level of prefix', function () {
-                assert.equal(this.object._getRelativeKeypath('root.root'), 'root');
-            });
-
-            test('Handles empty prefix as expected', function () {
-                assert.equal(this.object._getRelativeKeypath('', ''), '');
-                assert.equal(this.object._getRelativeKeypath('root', ''), 'root');
-                assert.equal(this.object._getRelativeKeypath('root.foo', ''), 'root.foo');
+                assert.equal(this.object._getRelativeKeypath('root.root', 'root'), 'root');
             });
         });
     });
@@ -81,26 +73,26 @@ suite('KVCObject', function() {
             test('Sets root value as expected', function () {
                 this.object.setValueForKeypath('bar', '');
 
-                assert.deepEqual(this.object._object, {'root':'bar'});
+                assert.deepEqual(this.object._object, {'':'bar'});
             });
 
             test('Sets value as expected', function () {
                 this.object.setValueForKeypath('bar', 'foo');
 
-                assert.deepEqual(this.object._object, {'root.foo':'bar'});
+                assert.deepEqual(this.object._object, {'foo':'bar'});
             });
 
             test('Sets deep value as expected', function () {
                 this.object.setValueForKeypath('hello', 'foo.bar');
 
-                assert.deepEqual(this.object._object, {'root.foo.bar':'hello'});
+                assert.deepEqual(this.object._object, {'foo.bar':'hello'});
             });
 
             test('Updates value as expected', function () {
                 this.object.setValueForKeypath('hello', 'foo.bar');
                 this.object.setValueForKeypath('world', 'foo.bar');
 
-                assert.deepEqual(this.object._object, {'root.foo.bar':'world'});
+                assert.deepEqual(this.object._object, {'foo.bar':'world'});
             });
         });
 
@@ -137,16 +129,16 @@ suite('KVCObject', function() {
         suite('.setObjectForKeypath()', function () {
             test('Sets objects as expected', function () {
                 this.object.setObjectForKeypath({bar:'Hello'}, 'foo');
-                assert.deepEqual(this.object._object, {'root.foo.bar':'Hello'});
+                assert.deepEqual(this.object._object, {'foo.bar':'Hello'});
 
                 this.object.setObjectForKeypath({bar:'Hello', man:{name:'johnny'}}, 'foo');
-                assert.deepEqual(this.object._object, {'root.foo.bar':'Hello', 'root.foo.man.name':'johnny'});
+                assert.deepEqual(this.object._object, {'foo.bar':'Hello', 'foo.man.name':'johnny'});
 
                 this.object.setObjectForKeypath({name:'jimmy'}, 'foo.man');
-                assert.deepEqual(this.object._object, {'root.foo.bar':'Hello', 'root.foo.man.name':'jimmy'});
+                assert.deepEqual(this.object._object, {'foo.bar':'Hello', 'foo.man.name':'jimmy'});
 
                 this.object.setObjectForKeypath({foo:'bar', man:{name:'johnny'}}, '');
-                assert.deepEqual(this.object._object, {'root.foo':'bar', 'root.man.name':'johnny'});
+                assert.deepEqual(this.object._object, {'foo':'bar', 'man.name':'johnny'});
             });
         });
 
@@ -172,8 +164,8 @@ suite('KVCObject', function() {
                 this.object.setObject({foo:'bar', man:{name:'johnny'}});
 
                 assert.deepEqual(this.object._object, {
-                    'root.foo':'bar',
-                    'root.man.name':'johnny'});
+                    'foo':'bar',
+                    'man.name':'johnny'});
             });
 
             test('Overwrites object as expected', function () {
@@ -181,8 +173,8 @@ suite('KVCObject', function() {
                 this.object.setObject({foo:'bar', man:{name:'johnny'}});
 
                 assert.deepEqual(this.object._object, {
-                    'root.foo':'bar',
-                    'root.man.name':'johnny'});
+                    'foo':'bar',
+                    'man.name':'johnny'});
             });
         });
 
