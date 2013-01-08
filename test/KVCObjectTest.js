@@ -30,40 +30,40 @@ suite('KVCObject', function() {
         suite('._objectSize()', function () {
         });
 
-        suite('._getAbsoluteKeypath()', function () {
+        suite('._prefixKeypath()', function () {
             test('Handles empty prefix as expected', function () {
-                assert.equal(this.object._getAbsoluteKeypath(''), '');
-                assert.equal(this.object._getAbsoluteKeypath('foo'), 'foo');
-                assert.equal(this.object._getAbsoluteKeypath('foo.bar'), 'foo.bar');
-                assert.equal(this.object._getAbsoluteKeypath('root.foo.bar'), 'root.foo.bar');
+                assert.equal(this.object._prefixKeypath(''), '');
+                assert.equal(this.object._prefixKeypath('foo'), 'foo');
+                assert.equal(this.object._prefixKeypath('foo.bar'), 'foo.bar');
+                assert.equal(this.object._prefixKeypath('root.foo.bar'), 'root.foo.bar');
             });
 
             test('Adds prefix as expected', function () {
-                assert.equal(this.object._getAbsoluteKeypath('', 'root'), 'root');
-                assert.equal(this.object._getAbsoluteKeypath('foo', 'root'), 'root.foo');
-                assert.equal(this.object._getAbsoluteKeypath('foo.bar', 'root'), 'root.foo.bar');
+                assert.equal(this.object._prefixKeypath('', 'root'), 'root');
+                assert.equal(this.object._prefixKeypath('foo', 'root'), 'root.foo');
+                assert.equal(this.object._prefixKeypath('foo.bar', 'root'), 'root.foo.bar');
             });
 
             test('Doesn\'t add extra prefix', function () {
-                assert.equal(this.object._getAbsoluteKeypath('root.foo.bar', 'root'), 'root.foo.bar');
+                assert.equal(this.object._prefixKeypath('root.foo.bar', 'root'), 'root.foo.bar');
             });
         });
 
-        suite('._getRelativeKeypath()', function () {
+        suite('._unprefixKeypath()', function () {
             test('Handles empty prefix as expected', function () {
-                assert.equal(this.object._getRelativeKeypath(''), '');
-                assert.equal(this.object._getRelativeKeypath('root'), 'root');
-                assert.equal(this.object._getRelativeKeypath('root.foo'), 'root.foo');
+                assert.equal(this.object._unprefixKeypath(''), '');
+                assert.equal(this.object._unprefixKeypath('root'), 'root');
+                assert.equal(this.object._unprefixKeypath('root.foo'), 'root.foo');
             });
 
             test('Removes prefix as expected', function () {
-                assert.equal(this.object._getRelativeKeypath('root', 'root'), '');
-                assert.equal(this.object._getRelativeKeypath('root.foo', 'root'), 'foo');
-                assert.equal(this.object._getRelativeKeypath('root.foo.bar', 'root'), 'foo.bar');
+                assert.equal(this.object._unprefixKeypath('root', 'root'), '');
+                assert.equal(this.object._unprefixKeypath('root.foo', 'root'), 'foo');
+                assert.equal(this.object._unprefixKeypath('root.foo.bar', 'root'), 'foo.bar');
             });
 
             test('Removes only one level of prefix', function () {
-                assert.equal(this.object._getRelativeKeypath('root.root', 'root'), 'root');
+                assert.equal(this.object._unprefixKeypath('root.root', 'root'), 'root');
             });
         });
     });

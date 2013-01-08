@@ -21,10 +21,11 @@ Methods
 * **getObject**() - (_object_)  
     Returns the current root as a normal object.
 
-* **setObjectForKeypath**(< _object_ >object, < _string_ >keypath, [< _bool_ >silent]) - (_void_)  
-    Sets all values of an object from a given keypath. If this leads to a
-    change of the object, an `update` (and possibly also a `create` or `delete`
-    , see below) event will be triggered, unless `silent` is set to `true`.
+* **setObjectForKeypath**(< _object_ >object, < _string_ >rootKeypath, [< _bool_ >silent]) - (_void_)  
+    Sets all values of `object`, where `rootKeypath` will be the keypath to the
+    root of the object. If this leads to a change of the object, an `update`
+    (and possibly also a `create` or `delete`, see below) event will be
+    triggered, unless `silent` is set to `true`.
 
 * **getObjectForKeypath**(< _string_ >keypath) - (_object_)  
     Returns the object from `keypath`.
