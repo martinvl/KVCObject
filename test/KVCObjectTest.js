@@ -30,6 +30,34 @@ suite('KVCObject', function() {
         suite('._objectSize()', function () {
         });
 
+        suite('._hasChanges()', function () {
+            var kvc = new KVCObject();
+
+            test('Recognizes create as change', function () {
+                kvc.setValueForKeypath('bar', 'foo', true);
+                assert.isTrue(kvc._hasChanges());
+                kvc._emitChanges();
+                assert.isFalse(kvc._hasChanges());
+            });
+
+            test('Recognizes update as change', function () {
+                kvc.setValueForKeypath('car', 'foo', true);
+                assert.isTrue(kvc._hasChanges());
+                kvc._emitChanges();
+            });
+
+            test('Recognizes delete as change', function () {
+                kvc.setValueForKeypath(undefined, 'foo', true);
+                assert.isTrue(kvc._hasChanges());
+                kvc._emitChanges();
+            });
+
+            test('Recognizes repeated delete as not-a-change', function () {
+                kvc.setValueForKeypath(undefined, 'foo', true);
+                assert.isFalse(kvc._hasChanges());
+            });
+        });
+
         suite('._prefixKeypath()', function () {
             test('Handles empty prefix as expected', function () {
                 assert.equal(this.object._prefixKeypath(''), '');
