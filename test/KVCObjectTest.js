@@ -36,20 +36,20 @@ suite('KVCObject', function() {
             test('Recognizes create as change', function () {
                 kvc.setValueForKeypath('bar', 'foo', true);
                 assert.isTrue(kvc._hasChanges());
-                kvc._emitChanges();
+                kvc.commit();
                 assert.isFalse(kvc._hasChanges());
             });
 
             test('Recognizes update as change', function () {
                 kvc.setValueForKeypath('car', 'foo', true);
                 assert.isTrue(kvc._hasChanges());
-                kvc._emitChanges();
+                kvc.commit();
             });
 
             test('Recognizes delete as change', function () {
                 kvc.setValueForKeypath(undefined, 'foo', true);
                 assert.isTrue(kvc._hasChanges());
-                kvc._emitChanges();
+                kvc.commit();
             });
 
             test('Recognizes repeated delete as not-a-change', function () {

@@ -38,6 +38,10 @@ Methods
 * **getValueForKeypath**(< _string_ >keypath) - (_non-object_)  
     Returns the value at `keypath`.
 
+* **commit**() - (_void_)  
+    Commits uncommited changes made with `silent` set to `true`. This leads to
+    change events being emitted.
+
 Events
 ------
 * **create**(< _object_ >created)  
