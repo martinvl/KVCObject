@@ -1,7 +1,10 @@
 KVCObject
 =========
 
-Key-value coding for javascript objects.
+Key-value coding for javascript objects. Gives access to values in object trees
+via keypaths. Emits update events as they come, with
+minimal changesets. Good for finding deltas for new
+versions of objects, and linking views to models.
 
 Public API
 ==========

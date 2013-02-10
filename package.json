@@ -2,5 +2,16 @@
     "name":"KVCObject",
     "version":"0.1.0b-4",
     "main":"lib/KVCObject.js",
+    "description":"Key-value coding for javascript objects.",
+    "keywords":["Key-value", "KVC", "delta", "keypath"],
+    "repository":{ "type":"git",
+        "url":"https://github.com/martinvl/KVCObject.git"
+    },
+    "author":{
+        "name":"Martin V. Larsen",
+        "email":"martin@melvon.com"
+    },
+    "homepage":"https://github.com/martinvl/KVCObject",
+    "bugs":"https://github.com/martinvl/KVCObject/issues",
     "dependencies":{}
 }
