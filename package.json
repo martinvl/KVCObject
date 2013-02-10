@@ -1,9 +1,9 @@
 {
-    "name":"KVCObject",
+    "name":"kvcobj",
     "version":"0.1.0-1",
     "main":"lib/KVCObject.js",
     "description":"Key-value coding for javascript objects.",
-    "keywords":["Key-value", "KVC", "delta", "keypath"],
+    "keywords":["Key-value coding", "KVC", "delta", "keypath", "KVCObject"],
     "repository":{ "type":"git",
         "url":"https://github.com/martinvl/KVCObject.git"
     },
