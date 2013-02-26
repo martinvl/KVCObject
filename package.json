@@ -1,6 +1,6 @@
 {
     "name":"kvcobj",
-    "version":"0.1.0-2",
+    "version":"0.1.0-3",
     "main":"lib/KVCObject.js",
     "description":"Key-value coding for javascript objects.",
     "keywords":["Key-value coding", "KVC", "delta", "keypath", "KVCObject"],
