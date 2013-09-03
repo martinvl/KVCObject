@@ -1,6 +1,6 @@
 {
     "name":"kvcobj",
-    "version":"0.1.0-4",
+    "version":"0.1.0-5",
     "main":"lib/KVCObject.js",
     "description":"Key-value coding for javascript objects.",
     "keywords":["Key-value coding", "KVC", "delta", "keypath", "KVCObject"],
@@ -13,5 +13,7 @@
     },
     "homepage":"https://github.com/martinvl/KVCObject",
     "bugs":"https://github.com/martinvl/KVCObject/issues",
-    "dependencies":{}
+    "dependencies":{
+        "inherits":">=2.0"
+    }
 }
